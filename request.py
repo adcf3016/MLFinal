@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 import requests
 import sys
@@ -26,7 +25,7 @@ class WordAndPosition:
         # 21cm * 30cm
         propotion = float(21 / width)
         self.size = int(propotion * self.height / 0.0358)
-        self.indent = int(propotion * self.pos[0] / 0.0358)
+        self.indent = int(propotion * self.pos[0] / 0.0358 - 1.5 / 0.0358)
         # print(self.size)
 
 
@@ -61,7 +60,7 @@ my_files = {}
 if not len(sys.argv[1:]):
     Usage()
 try:
-    opts, args = getopt.getopt(sys.argv,"hu:f:",["help", "url", "file"])
+    opts, args = getopt.getopt(sys.argv[1:],"hu:f:",["help", "url", "file"])
 except getopt.GetoptError as err:
     print(str(err))
     Usage()
@@ -73,6 +72,7 @@ for o, a in opts:
         open_file = a
         is_url = True
         my_files = {"url": open_file}
+        my_files = json.dumps(my_files)
     elif o in ("-f", "--file"):
         open_file = a
         my_files = open(open_file, 'rb')
@@ -89,9 +89,10 @@ my_headers = {'Content-Type': content_type,
 my_headers2 = {"Ocp-Apim-Subscription-Key": "e940faf1b4804a5082161f96afd56fd4"}
 all_word = []
 
-
+print(my_files)
 r = requests.post(url=my_endpoint, params=my_params,
                   headers=my_headers, data=my_files)
+print(r.url)
 content = requests.get(r.headers['Operation-Location'], headers=my_headers2)
 content = json.loads(content.content)
 while content['status'] != "succeeded":
