@@ -34,9 +34,6 @@ def CalculateDistance(x1, y1, x2, y2):
 
 def Usage():
     print('IDK tool')
-    print('example:')
-    print('python .\\request.py -u {your url}')
-    print('or python .\\request.py -f {your file}')
     sys.exit(0)
 
 
@@ -92,10 +89,10 @@ my_headers = {'Content-Type': content_type,
 my_headers2 = {"Ocp-Apim-Subscription-Key": "e940faf1b4804a5082161f96afd56fd4"}
 all_word = []
 
-# print(my_files)
+print(my_files)
 r = requests.post(url=my_endpoint, params=my_params,
                   headers=my_headers, data=my_files)
-# print(r.url)
+print(r.url)
 content = requests.get(r.headers['Operation-Location'], headers=my_headers2)
 content = json.loads(content.content)
 while content['status'] != "succeeded":
@@ -118,4 +115,3 @@ for i in all_word:
     i.PixelToSize(width, height, angle)
 
 CreateWordFile(all_word)
-print("Creat Word File Over!")
